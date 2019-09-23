@@ -5,6 +5,7 @@
     <title>Title</title>
     <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
     <link href="styles/styles.css" type="text/css" rel="stylesheet">
+    <link href="styles/spinner.css" type="text/css" rel="stylesheet">
 </head>
 <body class="rows">
 <h1 class="row header">
@@ -20,8 +21,22 @@
 
     <div class="col output">
         <p class="header">Output:
-            <button onclick="PART_1()">Run "Part 1"</button>
-            <button onclick="PART_2()">Run "Part 2"</button>
+            <button onclick="PART_1(event)">Run "Part 1"
+                <div class="lds-ellipsis">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </button>
+            <button onclick="PART_2(event)">Run "Part 2"
+                <div class="lds-ellipsis">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </button>
         </p>
         <pre class="body"></pre>
     </div>
@@ -29,8 +44,10 @@
 <script id="promise-code">
     /******************** PART 1 ********************/
     /* Chained '.then()' does NOT modify original promise */
-    function PART_1() {
+    function PART_1(event) {
         function scenario_1_init() {
+            const button = event.target;
+            button.disabled = true;
 
             /* promise cached WITHOUT a chained 'then' callback function */
             const promise = new Promise((resolve, reject) => {
@@ -41,6 +58,7 @@
 
             /* 'chained' callback on 'then' after assignment to promise completed */
             promise.then((value) => {
+                button.disabled = false;
                 LOG(`${value} ------ original`);
                 return value.reverse();
             });
@@ -59,6 +77,9 @@
     /* Chained '.then()' DOES modify original promise */
     function PART_2() {
         function scenario_2_init() {
+            const button = event.target;
+            button.disabled = true;
+
             /* promise defined without a chained 'then' callback function */
             const promise = new Promise((resolve, reject) => {
                 setTimeout(() => {
@@ -68,6 +89,7 @@
 
             /* 'chained' callback returned WITH 'then' after assignment to promise completed */
             return promise.then((value) => {
+                button.disabled = false;
                 LOG(`${value} ------ original`);
                 return value.reverse();
             });
@@ -91,6 +113,7 @@
         output = output.join('');
         return output;
     };
+
 
     function LOG(message) {
         console.log(message);

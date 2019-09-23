@@ -80,4 +80,24 @@ button {
     font-weight: bold;
     border: 1px solid transparent;
     border-radius: 3px;
+    cursor: pointer;
+}
+
+button:disabled {
+    background: #505050;
+    color: #cccccc;
+    cursor: default;
+}
+
+button > div.lds-ellipsis {
+    /*display: none;*/
+    overflow: hidden;
+    display: inline-block;
+    margin-left: 0;
+    width: 0;
+    transition: width ease-in-out 0.5s, margin-left ease-in-out 0.5s;
+}
+button:disabled > div.lds-ellipsis {
+    margin-left: 16px;
+    width: 32px;
 }
