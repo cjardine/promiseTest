@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://fonts.googleapis.com/css?family=Quicksand&display=swap" rel="stylesheet">
+    <style type="text/css">
+        body {
+            font-family: 'Quicksand', Arial, sans-serif;
+            font-size: 16px;
+        }
+
+        label {
+            /*transition: all 0.6s;*/
+            border-radius: 10px;
+            border: 2px solid #505050;
+            color: #000;
+            display: block;
+            margin: 10px;
+            padding: 10px 30px;
+        }
+
+        label.selected {
+            border-color: #3cf;
+            box-shadow: 0 0 10px rgba(51, 204, 255, 0.3);
+        }
+
+        label.deselected {
+            border-color: #ccc;
+            color: #999;
+        }
+
+        label input[type=radio] {
+            display: none;
+        }
+
+        label p {
+            margin: 0;
+            max-height: 0;
+            overflow: hidden;
+        }
+
+        label.selected p {
+            transition: all 0.6s;
+            margin: 5px 0;
+            max-height: 400px;
+        }
+
+        button {
+            font-size: 16px;
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            background-color: #06c;
+        }
+
+    </style>
+</head>
+<body>
+
+<form>
+    <radio-toggle
+            name="test"
+            title="this is component 1"
+            value="1"
+            message="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Orci a scelerisque purus semper eget duis at tellus at. Ut eu sem integer vitae. Euismod elementum nisi quis eleifend quam adipiscing vitae proin. Quis imperdiet massa tincidunt nunc. Nunc scelerisque viverra mauris in aliquam sem. Suspendisse interdum consectetur libero id faucibus. Faucibus nisl tincidunt eget nullam non nisi est sit amet. Ac ut consequat semper viverra nam libero justo laoreet. Sed arcu non odio euismod lacinia at quis risus. Vel orci porta non pulvinar. Bibendum ut tristique et egestas quis. Consectetur adipiscing elit ut aliquam purus sit amet luctus. Nunc sed velit dignissim sodales ut. Ut tellus elementum sagittis vitae et leo. Ut sem nulla pharetra diam sit amet nisl suscipit. Neque viverra justo nec ultrices dui. Amet tellus cras adipiscing enim eu turpis egestas. Pulvinar elementum integer enim neque volutpat."
+    ></radio-toggle>
+
+    <radio-toggle
+            name="test"
+            title="this is component 2"
+            value="2"
+            message="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Orci a scelerisque purus semper eget duis at tellus at. Ut eu sem integer vitae. Euismod elementum nisi quis eleifend quam adipiscing vitae proin. Quis imperdiet massa tincidunt nunc. Nunc scelerisque viverra mauris in aliquam sem. Suspendisse interdum consectetur libero id faucibus. Faucibus nisl tincidunt eget nullam non nisi est sit amet. Ac ut consequat semper viverra nam libero justo laoreet. Sed arcu non odio euismod lacinia at quis risus. Vel orci porta non pulvinar. Bibendum ut tristique et egestas quis. Consectetur adipiscing elit ut aliquam purus sit amet luctus. Nunc sed velit dignissim sodales ut. Ut tellus elementum sagittis vitae et leo. Ut sem nulla pharetra diam sit amet nisl suscipit. Neque viverra justo nec ultrices dui. Amet tellus cras adipiscing enim eu turpis egestas. Pulvinar elementum integer enim neque volutpat."
+    ></radio-toggle>
+
+    <p>
+        <button>Submit</button>
+    </p>
+</form>
+
+<p>Current Value: <span id="output"></span></p>
+<p>performance: <span id="performance"></span></p>
+
+<script>
+    const $output = document.querySelector('#output');
+    const $performance = document.querySelector('#performance');
+    const button = document.querySelector('button');
+    const form = document.querySelector('form');
+    let timing = document.querySelector('#output');
+
+    button.addEventListener('click', (event) => {
+        event.preventDefault();
+        event.cancelBubble = true;
+        const formData = new FormData(form);
+        console.log(formData.get('test'));
+    });
+
+
+    class RadioToggle extends HTMLElement {
+        contents = document.createRange().createContextualFragment(`
+                    <label>
+                    <h1>${this.getAttribute('title')}</h1>
+                    <p>${this.getAttribute('message')}</p>
+                    <input value="${this.getAttribute('value')}" type="radio" name="${this.getAttribute('name')}">
+                    </label>
+                `);
+
+        height;
+
+        constructor() {
+            super();
+
+            this.name = this.getAttribute('name');
+            const eventName = `label:deselect:${name}`;
+            this.appendChild(this.contents);
+            const label = this.querySelector('label');
+            const input = this.querySelector('input');
+            const para = this.querySelector('p');
+            const tempPara = para.cloneNode();
+            tempPara.style.width = getComputedStyle(para)['width'];
+            document.addEventListener(eventName, (event) => {
+                if (!input.checked) {
+                    $performance.innerText = `${(performance.now() - timing)}`;
+                    label.classList.remove('selected');
+                    label.classList.add('deselected');
+                    // if (this.height) {
+                    //     para.style.maxHeight = '0';
+                    // }
+                }
+            });
+            input.addEventListener('change', (event) => {
+                if (input.checked) {
+                    timing = performance.now();
+                    label.classList.add('selected');
+                    label.classList.remove('deselected');
+                    $output.innerText = `${input.value}`;
+                    const event = new Event(eventName);
+                    document.dispatchEvent(event);
+                    // if (!this.height) {
+                    //     setTimeout(() => {
+                    //         this.height = getComputedStyle(para)['height'];
+                    //     }, 500)
+                    // } else {
+                    //     para.style.maxHeight = this.height;
+                    // }
+                }
+            });
+
+        }
+    }
+
+    customElements.define('radio-toggle', RadioToggle);
+</script>
+</body>
+</html>

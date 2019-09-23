@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
+    <link href="styles/styles.css" type="text/css" rel="stylesheet">
+</head>
+<body class="rows">
+<h1 class="row header">
+    Promise
+</h1>
+<div class="row flex-auto cols">
+    <div class="col code">
+        <div class="header">
+            <p>Code:</p>
+        </div>
+        <pre class="body"><code class="javascript"></code></pre>
+    </div>
+
+    <div class="col output">
+        <p class="header">Output:
+            <button onclick="PART_1()">Run "Part 1"</button>
+            <button onclick="PART_2()">Run "Part 2"</button>
+        </p>
+        <pre class="body"></pre>
+    </div>
+</div>
+<script id="promise-code">
+    /******************** PART 1 ********************/
+    /* Chained '.then()' does NOT modify original promise */
+    function PART_1() {
+        function scenario_1_init() {
+
+            /* promise cached WITHOUT a chained 'then' callback function */
+            const promise = new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve('FOO');
+                }, 1000)
+            });
+
+            /* 'chained' callback on 'then' after assignment to promise completed */
+            promise.then((value) => {
+                LOG(`${value} ------ original`);
+                return value.reverse();
+            });
+            return promise;
+        }
+
+        let scenario_1_promise = scenario_1_init();
+
+        /* 'returned' callback from function */
+        scenario_1_promise.then((value) => {
+            LOG(`${value} ------ returned`);
+        });
+    }
+
+    /******************** PART 2 ********************/
+    /* Chained '.then()' DOES modify original promise */
+    function PART_2() {
+        function scenario_2_init() {
+            /* promise defined without a chained 'then' callback function */
+            const promise = new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve('BAR');
+                }, 1000)
+            });
+
+            /* 'chained' callback returned WITH 'then' after assignment to promise completed */
+            return promise.then((value) => {
+                LOG(`${value} ------ original`);
+                return value.reverse();
+            });
+        }
+
+        let scenario_2_promise = scenario_2_init();
+
+        /* 'returned' callback from function */
+        scenario_2_promise.then((value) => {
+            LOG(`${value} ------ returned`);
+        });
+    }
+
+</script>
+<script>
+    const $code = document.querySelector('.code > pre > code');
+    const $output = document.querySelector('.output > pre');
+    String.prototype.reverse = function (value) {
+        let output = this.valueOf().split('');
+        output = output.reverse();
+        output = output.join('');
+        return output;
+    };
+
+    function LOG(message) {
+        console.log(message);
+        if ($output.innerText !== '' && $output.innerText !== undefined) {
+            $output.innerText += '\n';
+        }
+        $output.innerText += message;
+    }
+
+    function promiseExecute(LOG) {
+        PART_1();
+        PART_2();
+    }
+
+    function initDemo() {
+        var script = document.querySelector('#promise-code');
+
+        $code.innerText = script.text;
+        hljs.highlightBlock($code);
+        // promiseExecute(LOG);
+    }
+
+    document.addEventListener('DOMContentLoaded', initDemo);
+</script>
+<link rel="stylesheet"
+      href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/darcula.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+</body>
+</html>
