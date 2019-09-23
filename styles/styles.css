@@ -61,10 +61,23 @@ pre code {
 }
 
 .col > .header {
+    display: flex;
     padding: 20px;
     flex: 0 0 auto;
+}
+.col > .header > button {
+    margin-left: 20px;
 }
 
 .col > .body {
     flex: 1 1 auto;
+}
+
+button {
+    padding: 6px 20px;
+    background: #303030;
+    color: #f3f3f3;
+    font-weight: bold;
+    border: 1px solid transparent;
+    border-radius: 3px;
 }
