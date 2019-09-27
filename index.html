@@ -21,6 +21,7 @@
 
     <div class="col output">
         <p class="header">Output:
+            <label> <input type="number" maxlength="2" id="secondsFeild" value="2"> seconds</label>
             <button onclick="PART_1(event)">Run "Part 1"
                 <div class="lds-ellipsis">
                     <div></div>
@@ -53,7 +54,7 @@
             const promise = new Promise((resolve, reject) => {
                 setTimeout(() => {
                     resolve('FOO');
-                }, 1000)
+                }, (parseInt($secondsFeild.value) * 1000))
             });
 
             /* 'chained' callback on 'then' after assignment to promise completed */
@@ -84,7 +85,7 @@
             const promise = new Promise((resolve, reject) => {
                 setTimeout(() => {
                     resolve('BAR');
-                }, 1000)
+                }, (parseInt($secondsFeild.value) * 1000))
             });
 
             /* 'chained' callback returned WITH 'then' after assignment to promise completed */
@@ -107,6 +108,7 @@
 <script>
     const $code = document.querySelector('.code > pre > code');
     const $output = document.querySelector('.output > pre');
+    const $secondsFeild = document.querySelector('#secondsFeild');
     String.prototype.reverse = function (value) {
         let output = this.valueOf().split('');
         output = output.reverse();
