@@ -64,6 +64,7 @@ pre code {
     display: flex;
     padding: 20px;
     flex: 0 0 auto;
+    align-items: center;
 }
 .col > .header > button {
     margin-left: 20px;
@@ -73,11 +74,20 @@ pre code {
     flex: 1 1 auto;
 }
 
+input[type="number"] {
+    width: 3em;
+    padding: 2px 10px;
+    font-size: 100%;
+    margin: 0 5px;
+    text-align: right;
+}
+
+
 button {
+    font-size: 100%;
     padding: 6px 20px;
     background: #303030;
     color: #f3f3f3;
-    font-weight: bold;
     border: 1px solid transparent;
     border-radius: 3px;
     cursor: pointer;
@@ -90,7 +100,6 @@ button:disabled {
 }
 
 button > div.lds-ellipsis {
-    /*display: none;*/
     overflow: hidden;
     display: inline-block;
     margin-left: 0;
